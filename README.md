@@ -1,8 +1,7 @@
-# EventSphere — Event Management Platform
+# EventSphere (Event Management Platform)
 
-<p align="center">
-  <img src="eventsphere.png" alt="EventSphere Banner" width="100%">
-</p>
+  <img src="eventsphere.PNG" alt="EventSphere Banner" width="100%">
+
 
 EventSphere is a comprehensive MERN-stack event management platform tailored for Expos and Conferences. It features three distinct interfaces: Admin Panel, Exhibitor Portal, and Attendee Interface, all built with React, Node.js, Express, and MongoDB.
 
