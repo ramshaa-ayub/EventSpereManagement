@@ -1,8 +1,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // api.js  —  All API helpers with unified auth support
 // ─────────────────────────────────────────────────────────────────────────────
-
-const BASE = "/api";
+const BASE = `${import.meta.env.VITE_API_URL || ""}/api`;
 
 // ── Unified Auth Store ────────────────────────────────────────────────────────
 const TOKEN_KEY = "eventsphere_token";
