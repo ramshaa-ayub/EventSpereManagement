@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { G, ACCENT, Card, Btn, Badge, SectionTitle, Alert } from "./shared.jsx";
-import { getToken } from "../api.js";
+import { getToken, API_BASE } from "../api.js";
 
 export default function Profile({ user, onUpdate }) {
   const [form, setForm] = useState({
@@ -69,7 +69,7 @@ export default function Profile({ user, onUpdate }) {
         fd.append("logo", fileRef.current.files[0]);
       }
 
-      const res = await fetch("/api/users/profile", {
+      const res = await fetch(`${API_BASE}/users/profile`, {
         method: "PUT",
         body: fd,
         headers: token ? { Authorization: `Bearer ${token}` } : {},

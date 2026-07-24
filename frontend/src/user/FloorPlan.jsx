@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { G } from '@utils/theme.js';
 import Card from '@components/Card.jsx';
+import { API_BASE } from '../api.js';
 
 export default function FloorPlan({ setTab, expos = [] }) {
   const [sel, setSel] = useState(null);
@@ -11,7 +12,7 @@ export default function FloorPlan({ setTab, expos = [] }) {
   // Fetch booths
   useEffect(() => {
     setLoading(true);
-    fetch('/api/booths')
+    fetch(`${API_BASE}/booths`)
       .then(r => r.json())
       .then(data => {
         setBooths(data);

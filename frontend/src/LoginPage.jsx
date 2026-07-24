@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { apiLogin, apiRegister } from "./api.js";
+import { apiLogin, apiRegister, API_BASE } from "./api.js";
+
+// ─── Demo accounts (for quick testing / grading) ──────────────────────────────
+const DEMO_CREDS = {
+  admin:     { email: "admin@gmail.com",     password: "1234" },
+  exhibitor: { email: "exhibitor@gmail.com", password: "1234" },
+  attendee:  { email: "user@gmail.com",      password: "1234" },
+};
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const G = {
@@ -131,7 +138,7 @@ export default function LoginPage({ onLogin, initialScreen = "login", initialRes
           fd.append("password", password);
           fd.append("role",     role);
           fd.append("logo",     logoFile);
-          const res  = await fetch("/api/auth/register", { method: "POST", body: fd });
+          const res  = await fetch(`${API_BASE}/auth/register`, { method: "POST", body: fd });
           const json = await res.json();
           if (!res.ok) throw new Error(json.message || "Registration failed");
           // Save auth
@@ -159,7 +166,7 @@ export default function LoginPage({ onLogin, initialScreen = "login", initialRes
     if (!fpEmail) { setError("Please enter your email."); return; }
     setLoading(true);
     try {
-      const res  = await fetch("/api/auth/forgot-password", {
+      const res  = await fetch(`${API_BASE}/auth/forgot-password`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: fpEmail }),
       });
@@ -188,7 +195,7 @@ export default function LoginPage({ onLogin, initialScreen = "login", initialRes
     if (!newPw || newPw.length < 4) { setError("Password must be at least 4 characters."); return; }
     setLoading(true);
     try {
-      const res  = await fetch(`/api/auth/reset-password/${resetInput.trim()}`, {
+      const res  = await fetch(`${API_BASE}/auth/reset-password/${resetInput.trim()}`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ newPassword: newPw }),
       });
@@ -207,6 +214,14 @@ export default function LoginPage({ onLogin, initialScreen = "login", initialRes
     } finally {
       setLoading(false);
     }
+  };
+
+  // ── Fill demo credentials for the currently selected role ────────────────
+  const fillDemo = () => {
+    const creds = DEMO_CREDS[role];
+    setEmail(creds.email);
+    setPassword(creds.password);
+    setError("");
   };
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -287,6 +302,27 @@ export default function LoginPage({ onLogin, initialScreen = "login", initialRes
                       {m === "login" ? "🔑 Sign In" : "✨ Register"}
                     </button>
                   ))}
+                </div>
+              )}
+
+              {mode === "login" && (
+                <div style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+                  marginBottom: 16, padding: "10px 12px",
+                  background: `${accentColor}0d`, border: `1px dashed ${accentColor}45`, borderRadius: 10,
+                }}>
+                  <div style={{ fontSize: 11, color: G.muted, lineHeight: 1.5 }}>
+                    <span style={{ color: accentColor, fontWeight: 700 }}>Demo {meta.label}:</span>{" "}
+                    {DEMO_CREDS[role].email} / {DEMO_CREDS[role].password}
+                  </div>
+                  <button type="button" onClick={fillDemo}
+                    style={{
+                      flexShrink: 0, background: accentColor, color: "#fff", border: "none",
+                      borderRadius: 8, padding: "7px 12px", fontSize: 11, fontWeight: 700,
+                      cursor: "pointer", fontFamily: "'Plus Jakarta Sans',sans-serif",
+                    }}>
+                    ⚡ Autofill
+                  </button>
                 </div>
               )}
 

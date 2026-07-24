@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { G, globalCss } from '@utils/theme.js';
 import { EXPOS, SESSIONS, EXHIBITORS } from '@data/mockData.js';
-import { fetchMyRegistrations } from '../api.js';
+import { fetchMyRegistrations, API_BASE } from '../api.js';
 
 // Page components
 import Discover   from './Discover.jsx';
@@ -44,10 +44,10 @@ export default function AttendeeLayout({ user = null, onLoginClick, onLogout }) 
   const fetchLiveData = useCallback(async () => {
     try {
       const [exposRes, sessionsRes, appsRes, usersRes] = await Promise.all([
-        fetch('/api/expos').then(r => r.json()),
-        fetch('/api/sessions').then(r => r.json()),
-        fetch('/api/applications?status=approved').then(r => r.json()),
-        fetch('/api/users').then(r => r.json()).catch(() => []),
+        fetch(`${API_BASE}/expos`).then(r => r.json()),
+        fetch(`${API_BASE}/sessions`).then(r => r.json()),
+        fetch(`${API_BASE}/applications?status=approved`).then(r => r.json()),
+        fetch(`${API_BASE}/users`).then(r => r.json()).catch(() => []),
       ]);
 
       // Compute live user stats from /api/users
